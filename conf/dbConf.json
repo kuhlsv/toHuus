@@ -1,0 +1,5 @@
+{
+  "url": "mongodb://localhost",
+  "database": "HA17DB_Sven_Kuhlmann_MN610292",
+  "port": "4242"
+}

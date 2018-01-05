@@ -1,0 +1,64 @@
+{{ define "content" }}
+<!-- Article -->
+    <!-- Login -->
+    <section id="login" class="one dark cover">
+        <div class="container">
+            <header>
+                <h3 class="alt">Hallo! Ich bin <strong>to:Huus</strong>, ein Smart-Home Steuersystem</h3>
+                <h2>Logge dich erst ein, um mich zu nutzen!</h2><br>
+                <form method="post" action="">
+                    <div class="row centered">
+                        <input type="text" name="uname" placeholder="Username" />
+                        <input type="password" name="passwd" placeholder="Password" />
+                    </div>
+                    <div class="row centered">
+                        <input type="submit" name="authBtn" value="Login" />
+                        <input type="submit" name="authBtn" value="Registration" />
+                    </div>
+                </form>
+            </header>
+            <footer></footer>
+        </div>
+    </section>
+    <!-- Data -->
+    <section id="data" class="four">
+        <div class="container">
+            <header>
+                <h2>Data</h2>
+            </header>
+            <form method="post" action="/sim/data?type=export">
+                <fieldset>
+                    <span><b>Export data by XML: </b></span><br>
+                    <input id="exportBtn" type="submit" name="submit" value="Export" disabled>
+                </fieldset>
+            </form>
+            <br><br>
+            <form method="post" action="/sim/data?type=import" enctype="multipart/form-data">
+                <fieldset>
+                    <span><b>Import data by XML: </b></span><br>
+                    <input type="hidden" name="test" value="test">
+                    <input type="file" name="dataFile" id="dataFile" multiple="multiple">
+                    <input type="submit" name="submit" value="Import">
+                </fieldset>
+            </form>
+        </div>
+    </section>
+    <!-- About -->
+    <section id="about" class="three">
+        <div class="container">
+            <header>
+                <h2>About</h2>
+            </header>
+            <p>Bei dieser Webseite handelt es sich um eine Implementierung eines SmartHomes.
+                Da kein echtes System angebunden ist, wurde ein Simulator integriert.</p>
+            <p>Diese Webseite wurde im Rahmen einer Hausarbeit der Hochschule Flensburg erschaffen.
+                Sie ist Inhalt der Prüfungsleistung für das Modul Webprogrammierung und wurde in alleiniger Arbeit von
+                von <b>Sven Kuhlmann</b> erstellt.<br>
+                Sämtliches wissen zum erstellen des Inhaltest stammt aus den Vorlesungen/Laboren und dem eigenen
+                Wissenstand.<br>
+                Da für einige Medien eventuell keine Rechte bestehen, ist der öffentliche Gebrauch untersagt.</p>
+            <p>Für weitere Informationen oder Fragen kontaktieren Sie mich hier:<br>
+                <a href="mailto:Sven.Kuhlmann@stud.hs-flensburg.de">EMail senden</a></p>
+        </div>
+    </section>
+{{ end }}

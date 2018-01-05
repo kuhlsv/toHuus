@@ -1,0 +1,255 @@
+{{ define "content" }}
+<!-- Article -->
+        <!-- Overview -->
+        <section id="home" class="one dark cover">
+            <div class="container">
+                <article>
+                </article>
+            </div>
+        </section>
+        <!-- Devices -->
+        <section id="devices" class="three">
+            <div class="container">
+                <header>
+                    <h2>Devices</h2>
+                </header>
+                <article>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Room</th>
+                            <th>Type</th>
+                            <th>Action</th>
+                        </tr>
+                    {{ range .Devices }}
+                        <tr id="D_{{ .Name }}">
+                            <td>{{ .Name }}</td>
+                            <td>{{ .Room }}</td>
+                            <td>{{ .Type }}</td>
+                            <td>
+                                <img src="images/edit.png" class="edit-btn" name="DeviceItemEdit" id="D_{{ .Name }}" />
+                                <img src="images/delete.png" class="delete-btn" name="DeviceItemDel" id="D_{{ .Name }}" />
+                            </td>
+                        </tr>
+                    {{ end }}
+                    </table>
+                </article>
+            </div>
+        </section>
+         <!-- Events -->
+         <section id="events" class="three">
+             <div class="container">
+                 <header>
+                     <h2>Events</h2>
+                 </header>
+                 <article>
+                     <table>
+                         <tr>
+                             <th>Name</th>
+                             <th>Time</th>
+                             <th>Offset</th>
+                             <th>Devices(State)</th>
+                             <th>Action</th>
+                         </tr>
+                     {{ $events := .Events }} {{ $rels := .Rel }}
+                     {{ range $event := $events }}
+                         <tr id="E_{{ $event.Name }}">
+                             <td>{{ $event.Name }}</td>
+                             <td>{{ $event.Time }}</td>
+                             <td>{{ $event.Offset }}</td>
+                             <td>{{ range $rel := $rels }}{{ if eq $event.Id $rel.Id }}<span class="hide">{{ $rel.Room }}|</span>{{ $rel.Name }}({{ $rel.Value }}), {{ end }}{{ end }}</td>
+                             <td>
+                                 <img src="images/edit.png" class="edit-btn" name="EventItemEdit" id="E_{{ $event.Name }}" />
+                                 <img src="images/delete.png" class="delete-btn" name="EventItemDel" id="E_{{ $event.Name }}" />
+                             </td>
+                         </tr>
+                     {{ end }}
+                     </table>
+                 </article>
+             </div>
+         </section>
+         <!-- Types -->
+         <section id="types" class="two">
+             <div class="container">
+                 <header>
+                     <h2>Types</h2>
+                 </header>
+                 <article>
+                     <table>
+                         <tr>
+                             <th>Name</th>
+                             <th>Kind</th>
+                             <th>Min</th>
+                             <th>Max</th>
+                             <th>Action</th>
+                         </tr>
+                     {{ range .Types }}
+                         <tr id="T_{{ .Name }}">
+                             <td>{{ .Name }}</td>
+                             <td>{{ .Kind }}</td>
+                             <td>{{ .Min }}</td>
+                             <td>{{ .Max }}</td>
+                             <td>
+                                 <img src="images/edit.png" class="edit-btn" name="TypeItemEdit" id="T_{{ .Name }}" />
+                                 <img src="images/delete.png" class="delete-btn" name="TypeItemDel" id="T_{{ .Name }}" />
+                             </td>
+                         </tr>
+                     {{ end }}
+                     </table>
+                 </article>
+             </div>
+         </section>
+        <!-- User -->
+        <section id="user" class="four">
+            <div class="container">
+                <header>
+                    <h2>User</h2>
+                </header>
+                <form method="post" action="/ui/user?set=title">
+                    <fieldset>
+                        <span><b>Set a user title: </b></span><br>
+                        <input type="text" name="title" id="titleIpt">
+                        <input type="submit" name="submit" value="Set">
+                    </fieldset>
+                </form>
+                <form method="post" action="/ui/user?set=avatar" enctype="multipart/form-data">
+                    <fieldset>
+                        <span><b>Set an avatar image: </b></span><br>
+                        <input type="hidden" name="test" value="test">
+                        <input type="file" name="avatarFile" id="avatarFile" multiple="multiple">
+                        <input type="submit" name="submit" value="Upload">
+                    </fieldset>
+                </form>
+                <form method="post" action="/ui/user?del=user">
+                    <fieldset>
+                        <span><b>Delete this user: </b></span><br>
+                        <input type="submit" name="submit" value="Delete">
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+         <!-- About -->
+         <section id="about" class="three">
+             <div class="container">
+                 <header>
+                     <h2>About</h2>
+                 </header>
+                 <p>Bei dieser Webseite handelt es sich um eine Implementierung eines SmartHomes.
+                     Da kein echtes System angebunden ist, wurde ein Simulator integriert.</p>
+                 <p>Diese Webseite wurde im Rahmen einer Hausarbeit der Hochschule Flensburg erschaffen.
+                     Sie ist Inhalt der Prüfungsleistung für das Modul Webprogrammierung und wurde in alleiniger Arbeit von
+                     von <b>Sven Kuhlmann</b> erstellt.<br>
+                     Sämtliches wissen zum erstellen des Inhaltest stammt aus den Vorlesungen/Laboren und dem eigenen
+                     Wissenstand.<br>
+                     Da für einige Medien eventuell keine Rechte bestehen, ist der öffentliche Gebrauch untersagt.</p>
+                 <p>Für weitere Informationen oder Fragen kontaktieren Sie mich hier:<br>
+                     <a href="mailto:Sven.Kuhlmann@stud.hs-flensburg.de">EMail senden</a></p>
+             </div>
+         </section>
+<!-- Helper -->
+         <!-- Device Dialog -->
+         <dialog id="addDevice" class="dialog">
+             <form method="post" action="/ui/add">
+             <header class="dialog-header">
+                 <h1>Add a device</h1>
+             </header>
+             <div class="dialog-content">
+                 <table>
+                     <tbody>
+                     <tr>Name: <input type="text" name="dName" placeholder="Name"></tr>
+                     <tr>Room: <input type="text" name="dRoom" placeholder="Room"></tr>
+                     <tr>Type:
+                         <select title="Type" name="dType">
+                         {{ range .Types }}
+                             <option name="{{ .Name }}">{{ .Name }}</option>
+                         {{ end }}
+                         </select>
+                     </tr>
+                     </tbody>
+                 </table>
+             </div>
+             <div class="btn-group">
+                 <input type="submit" class="btn btn-add" id="addD" name="addDevice" value="Add" disabled>
+                 <input type="reset" class="btn btn-cancel" id="cancelD" value="Cancel">
+             </div>
+             </form>
+         </dialog>
+         <!-- Event Dialog -->
+         <dialog id="addEvent" class="dialog">
+             <form method="post" action="/ui/add">
+             <header class="dialog-header">
+                 <h1>Add an event</h1>
+             </header>
+             <div class="dialog-content">
+                 <table id="eDevices-table">
+                     <tbody>
+                     <tr><td colspan="2">Name: <input type="text" name="eName" placeholder="Name"></td></tr>
+                     <tr>
+                         <td>Time: <input type="time" name="eTime" placeholder="Time"></td>
+                         <td>Offset(min): <input type="number" id="eOffset" name="eOffset" min="-10" max="10" placeholder="0"></td>
+                     </tr>
+                     <tr><td colspan="2"><hr>Item | Set to<button id="eDevices-btn" type="button" class="addItem">+</button></td></tr>
+                     <tr class="item" name="eDevices-tr" id="eDevices1"><td>
+                         <select title="Devices" name="eDevice">
+                             <optgroup label="Devices">
+                             {{ range .Devices }}
+                                 <option name="{{ .Name }}">{{ .Name }} | {{ .Room }}</option>
+                             {{ end }}
+                             </optgroup>
+                         </select>
+                         <input type="number" class="fromTo" name="to" min="" max="" placeholder="To">
+                     </td></tr>
+                     </tbody>
+                 </table>
+             </div>
+             <div class="btn-group">
+                 <input type="submit" class="btn btn-add" id="addE" name="addEvent" value="Add" disabled>
+                 <input type="reset" class="btn btn-cancel" id="cancelE" value="Cancel">
+             </div>
+            </form>
+         </dialog>
+         <!-- Type Dialog -->
+         <dialog id="addType" class="dialog">
+             <form method="post" action="/ui/add">
+                 <header class="dialog-header">
+                     <h1>Add a type</h1>
+                 </header>
+                 <div class="dialog-content">
+                     <table id="tDevices-table">
+                         <tbody>
+                         <tr>Name: <input type="text" name="tName" placeholder="Name"></tr>
+                         <tr>Kind:
+                             <select title="Kind" name="tKind" id="tKind">
+                                 <option name="switch">Switch</option>
+                                 <option name="range">Range</option>
+                                 <option name="number">Number</option>
+                             </select>
+                         </tr>
+                         </tbody>
+                     </table>
+                 </div>
+                 <div class="btn-group">
+                     <input type="submit" class="btn btn-add" id="addT" name="addType" value="Add" disabled>
+                     <input type="reset" class="btn btn-cancel" id="cancelT" value="Cancel">
+                 </div>
+             </form>
+         </dialog>
+         <!-- Add -->
+         <input type="checkbox" id="add" class="add"/>
+         <label title="Add" class="addLabel" for="add"></label>
+         <div id="addMenu">
+             <ul id="addItems">
+                 <li id="addDeviceBtn"><a href="#devices">Device</a></li>
+                 <li id="addEventBtn"><a href="#events">Event</a></li>
+                 <li id="addTypeBtn"><a href="#types">Type</a></li>
+             </ul>
+         </div>
+         <!-- Logout -->
+         <form method="post" action="../">
+             <input title="Logout" type="image" src="images/logout.png" alt="Logout" id="logout" name="authBtn" value="Logout">
+         </form>
+         <!-- Simulator -->
+         <form method="post" target="_blank" action="/sim">
+             <input title="Simulator" type="image" src="images/sim.png" alt="Simulator" id="sim" name="sim" value="Simulator">
+         </form>
+{{ end }}
